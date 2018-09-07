@@ -26,14 +26,14 @@ library(shinythemes)
 
 Chicken.Weight <- ChickWeight
 
-DeitAverages <- Chicken.Weight %>% 
+DietAverages <- Chicken.Weight %>% 
   group_by(Diet) %>% 
   summarise(Avg_Weight = mean(weight))
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
    
-  navbarPage("Chicken Deit Dashboard", 
+  navbarPage("Chicken Diet Dashboard", 
              theme = shinytheme("flatly"),
              tabPanel("Chick Comparison",
                       sidebarLayout(
@@ -53,7 +53,7 @@ ui <- fluidPage(
                       )
              ),
              # Data Table
-             tabPanel("Diet Averages",
+             tabPanel("Diet Weight Averages",
                       sidebarLayout(
                         sidebarPanel(
                           sliderInput(inputId = "DaysIncluded", 
@@ -66,7 +66,7 @@ ui <- fluidPage(
                         ),
                         # Output plot
                         mainPanel(
-                          plotOutput(outputId = "DeitAverages")
+                          plotOutput(outputId = "DietAverages")
                         )
                       )
              )
@@ -78,11 +78,16 @@ server <- function(input, output) {
    
   output$Chickenplot <- renderPlot({
     #chickData <- filter(.data = Chicken.Weight, Chick == input$ChickToDisplay)
-    ggplot(data = Chicken.Weight, aes(x = Time, y = weight, color = Diet)) + geom_point()
+    ggplot(data = Chicken.Weight, aes(x = Time, y = weight, color = Diet)) + 
+      geom_point() + 
+      labs(x="Days Since Birth", y="Chick's Weight (gm)", title = "Chicken's Weight Since Birth")
   })
-  output$DeitAverages <- renderPlot({
+  output$DietAverages <- renderPlot({
     #chickData <- filter(.data = Chicken.Weight, Chick == input$ChickToDisplay)
-    ggplot(data = DeitAverages, aes(x = Diet, y = Avg_Weight, fill = Diet)) + geom_bar(stat = "identity")
+    ggplot(data = DietAverages, aes(x = Diet, y = Avg_Weight, fill = Diet)) + 
+      geom_bar(stat = "identity")+
+      labs(x="Experimental Diet Type", y="Average Weight (gm) of Chicks", title = "Average Weight of Chicks by Diet Type")
+  
   })
 }
 
