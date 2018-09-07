@@ -26,14 +26,16 @@ library(shinythemes)
 
 Chicken.Weight <- ChickWeight
 
-DeitAverages <- Chicken.Weight %>% group_by(Diet) %>% summarise(Avg_Weight = mean(weight))
+DeitAverages <- Chicken.Weight %>% 
+  group_by(Diet) %>% 
+  summarise(Avg_Weight = mean(weight))
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
    
   navbarPage("Chicken Deit Dashboard", 
-             theme = shinytheme("united"),
-             tabPanel("Plot",
+             theme = shinytheme("flatly"),
+             tabPanel("Chick Comparison",
                       sidebarLayout(
                         sidebarPanel(
                           numericInput(inputId = "ChickToDisplay", 
@@ -51,8 +53,22 @@ ui <- fluidPage(
                       )
              ),
              # Data Table
-             tabPanel("Table",
-                      fluidPage(DT::dataTableOutput("table"))
+             tabPanel("Diet Averages",
+                      sidebarLayout(
+                        sidebarPanel(
+                          sliderInput(inputId = "DaysIncluded", 
+                                       label = "How Many Day to Include",
+                                       value = 22, 
+                                       min = 0, 
+                                       max =22,
+                                       step = 2
+                          )
+                        ),
+                        # Output plot
+                        mainPanel(
+                          plotOutput(outputId = "DeitAverages")
+                        )
+                      )
              )
   )
 )
