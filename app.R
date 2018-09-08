@@ -9,7 +9,6 @@ library(shiny)
 library(tidyverse)
 library(shinythemes)
 
-
 #infomartion on Data Used
 # 
 # ChickWeight
@@ -22,7 +21,7 @@ library(shinythemes)
 # Time - a numeric vector giving the number of days since birth when the measurement was made.
 # Chick - an ordered factor with levels 18 < ... < 48 giving a unique identifier for the chick. The ordering of the levels groups chicks on the same diet together and orders them according to their final weight (lightest to heaviest) within diet.
 # Diet - a factor with levels 1, ..., 4 indicating which experimental diet the chick received.
-
+# This is great. In the future you can even put this in the UI using the HTML() function and use something like an unordered list <ul> tag
 
 Chicken.Weight <- ChickWeight
 
@@ -77,7 +76,7 @@ ui <- fluidPage(
 server <- function(input, output) {
    
   output$Chickenplot <- renderPlot({
-    #chickData <- filter(.data = Chicken.Weight, Chick == input$ChickToDisplay)
+    #chickData <- filter(.data = Chicken.Weight, Chick == input$ChickToDisplay) Broken or just didn't want to over do it??
     ggplot(data = Chicken.Weight, aes(x = Time, y = weight, color = Diet)) + 
       geom_point() + 
       labs(x="Days Since Birth", y="Chick's Weight (gm)", title = "Chicken's Weight Since Birth")
